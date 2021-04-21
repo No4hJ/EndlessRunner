@@ -24,3 +24,6 @@ let scoreConfig = {
 
 let lane = 2;
 let keyA, keyD, keyLEFT, keyRIGHT;
+let startCheck = false;
+let isCollided = false;
+let isLeft, isRight;
