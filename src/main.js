@@ -22,8 +22,8 @@ let scoreConfig = {
     fixedWidth: 0
 };
 
-let lane = 2;
-let keyA, keyD, keyLEFT, keyRIGHT;
-let startCheck = false;
-let isCollided = false;
-let isLeft, isRight;
+let lane = 2; //lane
+let keyA, keyD, keyLEFT, keyRIGHT; //reserve key
+let startCheck = false; //start checking collision
+let isCollided = false; //check colision
+let isLeft, isRight; //used to control obstacle movement

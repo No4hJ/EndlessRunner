@@ -5,41 +5,48 @@ class Obstacle extends Phaser.GameObjects.Sprite {
 
         //add object to the existing scenes
         scene.add.existing(this);
-        this.damage = damage; // store damageCost
+        this.damage = damage; // store the damage cost to player (small cost 1 medium and large cost 2)
     }
 
     update() {
 
+        //set it back to visible
         this.alpha = 1;
 
+        //before it reach the edge
         if(!startCheck) {
             this.scaleX += .01;
             this.scaleY += .01;
             this.y += .1;
         }
 
+        //go left when canvas goes left
         if(isLeft) {
             this.x -= 300;
         }
 
+        //go right when canvas goes right
         if(isRight) {
             this.x += 300;
         }
 
+        //rotate right as the canvas rotates right
         if(keyA.isDown) {
             this.angle += 1;
         }
 
+        //rotate left as the canvas rotates left
         if(keyD.isDown) {
             this.angle -= 1;
         }
     }
 
+    //reset the obstacle back to initial state after checking collision
     reset() {
-        this.alpha = 0;
-        this.y = 100;
-        this.scaleX = 1;
-        this.scaleY = 1;
+        this.alpha = 0; //make it invisble for a sec
+        this.y = 100; //back to intial position
+        this.scaleX = 1; //back to initial size
+        this.scaleY = 1; // back to initial size
 
     }
 }

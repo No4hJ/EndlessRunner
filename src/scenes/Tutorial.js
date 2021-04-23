@@ -4,6 +4,7 @@ class Tutorial extends Phaser.Scene {
     }
 
     create() {
+        //display the content
         this.tutorial = this.add.text(200,200,"tutorial!", scoreConfig);
 
         //go back to menu
