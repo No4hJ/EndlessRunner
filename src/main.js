@@ -3,7 +3,13 @@ let config = {
     type: Phaser.CANVAS,
     width: 640,
     height: 480,
-    scene: [ Menu, Play, Credit, Tutorial ]
+    scene: [ Menu, Play, Credit, Tutorial ],
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: true
+        }
+    }
 }
 
 let game = new Phaser.Game(config);
@@ -22,8 +28,7 @@ let scoreConfig = {
     fixedWidth: 0
 };
 
-let lane = 2; //lane
+let lane; //lane
 let keyA, keyD, keyLEFT, keyRIGHT; //reserve key
 let startCheck = false; //start checking collision
-let isCollided = false; //check colision
 let isLeft, isRight; //used to control obstacle movement

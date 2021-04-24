@@ -17,7 +17,8 @@ class Obstacle extends Phaser.GameObjects.Sprite {
         if(!startCheck) {
             this.scaleX += .01;
             this.scaleY += .01;
-            this.y += .1;
+            this.x += .05;
+            this.y += .05;
         }
 
         //go left when canvas goes left
@@ -33,18 +34,24 @@ class Obstacle extends Phaser.GameObjects.Sprite {
         //rotate right as the canvas rotates right
         if(keyA.isDown) {
             this.angle += 1;
+            this.x += 2;
+            this.y += 0.3;
         }
 
         //rotate left as the canvas rotates left
         if(keyD.isDown) {
             this.angle -= 1;
+            this.x -= 2;
+            this.y += 0.3;
         }
     }
 
     //reset the obstacle back to initial state after checking collision
     reset() {
         this.alpha = 0; //make it invisble for a sec
+        this.x = game.config.width;
         this.y = 100; //back to intial position
+        this.angle = 0;
         this.scaleX = 1; //back to initial size
         this.scaleY = 1; // back to initial size
 
