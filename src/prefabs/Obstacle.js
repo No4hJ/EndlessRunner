@@ -49,8 +49,8 @@ class Obstacle extends Phaser.GameObjects.Sprite {
     //reset the obstacle back to initial state after checking collision
     reset() {
         this.alpha = 0; //make it invisble for a sec
-        this.x = game.config.width;
-        this.y = 100; //back to intial position
+        this.x = xCo;
+        this.y = yCo; //back to intial position
         this.angle = 0;
         this.scaleX = 1; //back to initial size
         this.scaleY = 1; // back to initial size

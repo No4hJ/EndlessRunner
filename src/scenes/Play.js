@@ -7,25 +7,36 @@ class Play extends Phaser.Scene{
     preload() {
         this.load.image('earth', './assets/earth_.png');
         this.load.image('stone', './assets/stone.png');
-        this.load.image('ship', './assets/Spaceship.png');
+        this.load.image('ship', './assets/spaceship.png');
     }
 
     create() {
         //condition of game ending
         lane = 2; //intialize lane
-        this.gameOver = false;
-        this.hp = 20;
+        this.gameOver = false; //game end or not
+        this.hp = 20; //initialize health
+        this.isSpawn = true; //spawn obstacle or not
 
         //test objects
         this.background = new Canvas(this, 320, 440, 'earth').setOrigin(0.5, 0.5); //background
-        this.paper = new Obstacle(this, 500,100, 'stone', 0, 1).setScale(1); //obstacle
-        
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
         this.ship = this.add.sprite(320,240,'ship').setScale(1);
+        
+        //spawn obstacles
+        this.spawntimer = this.time.addEvent({
+            delay: 500,                // ms
+            callback: () => {
+                xCo = Math.floor(Math.random() * game.config.width);
+            },
+            callbackScope: null,
+            loop: true
+        });
+        this.paper = new Obstacle(this, this.xCo, yCo, 'stone', 0, 1).setScale(1); //obstacle
+
         console.log(this.paper.getBounds());
         console.log(this.ship.getBounds()); 
     }
@@ -70,5 +81,5 @@ class Play extends Phaser.Scene{
     checkCollision(obstacles, ship){
         return Phaser.Geom.Intersects.RectangleToRectangle(obstacles.getBounds(), ship.getBounds());
     }
-    
+
 }
