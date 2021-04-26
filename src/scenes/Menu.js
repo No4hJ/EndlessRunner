@@ -7,9 +7,27 @@ class Menu extends Phaser.Scene{
     preload() {
         this.load.image('play', './assets/gear.png');
         this.load.image('paper', './assets/paper.png');
+        this.load.image('title', './assets/title3.png');
+        this.load.image('lines','./assets/lines.png');
     }
     
     create() {
+        //create particles
+        this.add.particles('lines', [
+            {
+                //frame: "lines",
+                x: game.config.width / 2,
+                y: game.config.height / 4,
+                angle: { min: -180, max: 180 },
+                speed: 100,
+                gravityY: 0,
+                lifespan: 5000,
+                quantity: 0.01,
+                scale: { min: 0.05, max: 0.2 }
+            },
+        ]);
+        //create title
+        this.title = this.add.image(game.config.width / 2, game.config.height / 4, "title");
         // create the buttons 
         this.playbutton =  this.add.text(200,200, "Play", scoreConfig);
         this.creditbutton = this.add.text(200,250, "Credit", scoreConfig);

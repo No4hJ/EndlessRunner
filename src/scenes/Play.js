@@ -11,6 +11,8 @@ class Play extends Phaser.Scene{
     }
 
     create() {
+
+        
         //condition of game ending
         lane = 2; //intialize lane
         this.gameOver = false; //game end or not
@@ -19,6 +21,21 @@ class Play extends Phaser.Scene{
 
         //test objects
         this.background = new Canvas(this, 320, 440, 'earth').setOrigin(0.5, 0.5); //background
+        //particle
+        this.add.particles('lines', [
+            {
+                //frame: "lines",
+                x: game.config.width / 2,
+                y: 190,
+                angle: { min: -180, max: 180 },
+                speed: 500,
+                gravityY: 0,
+                lifespan: 5000,
+                quantity: 0.01,
+                scale: { min: 0.05, max: 0.2 }
+            },
+        ]);
+
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
