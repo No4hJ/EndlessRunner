@@ -11,14 +11,26 @@ class Play extends Phaser.Scene{
     }
 
     create() {
-
+        let scoreConfig = {
+            fontFamily: 'Gill Sans Extrabold',
+            fontSize: '28px',
+            //backgroundColor: '#F3B141',
+            color: '#FFFFFF',
+            align: 'right',
+            //padding: {
+            //top: 5,
+            //bottom: 5,
+            //},
+            //fixedWidth: 100
+        }
         
         //condition of game ending
         lane = 2; //intialize lane
         this.gameOver = false; //game end or not
-        this.hp = 20; //initialize health
+        this.hp = 2; //initialize health
         this.isSpawn = true; //spawn obstacle or not
 
+        this.distance = 0;
         //test objects
         this.background = new Canvas(this, 320, 440, 'earth').setOrigin(0.5, 0.5); //background
         //particle
@@ -56,6 +68,12 @@ class Play extends Phaser.Scene{
 
         console.log(this.paper.getBounds());
         console.log(this.ship.getBounds()); 
+        //timer or travel how long
+        this.score = this.add.text(50,50, 'You have traveled ' + this.distance +' miles.', scoreConfig);
+
+        //Gameover text
+        this.gameOvertext= this.add.text(220, 240, 'GAME OVER',scoreConfig).setOrigin(0.0);
+        this.gameOvertext.setVisible(false);
     }
 
 
@@ -72,22 +90,28 @@ class Play extends Phaser.Scene{
                 this.hp -= 1;
                 console.log("hit!");
                 console.log(this.hp);
+                this.distance += 1;
+                this.score.text = this.distance;
             } else {
                 startCheck = false;
                 this.paper.reset();
                 console.log("miss!");
-
+                this.distance += 1;
+                this.score.text = this.distance;
             }
         }
 
         this.background.update(); 
         this.paper.update();
- 
+
+
+        
         if(this.hp == 0) {
             this.gameOver = true;
         }
 
         if(this.gameOver) {
+            this.gameOvertext.setVisible(false);
             this.scene.start('menuScene');
         }
         

@@ -6,9 +6,9 @@ class Menu extends Phaser.Scene{
     //load images
     preload() {
         this.load.image('play', './assets/gear.png');
-        this.load.image('paper', './assets/paper.png');
         this.load.image('title', './assets/title3.png');
         this.load.image('lines','./assets/lines.png');
+        this.load.audio('button', './assets/button.wav')
     }
     
     create() {
@@ -40,17 +40,20 @@ class Menu extends Phaser.Scene{
         
         //go to play when click play
         this.playbutton.on('pointerdown', () => {
+            this.sound.play('button');
             this.scene.start('playScene');
         })
 
         //go to credit when click credit
         this.creditbutton.on('pointerdown', () => {
+            this.sound.play('button');
             console.log("e");
             this.scene.start('creditScene');
         })
         
         //go to tutorial when click tutorial
         this.tutorialbutton.on('pointerdown', () => {
+            this.sound.play('button');
             this.scene.start('tutorialScene');
         })
     }

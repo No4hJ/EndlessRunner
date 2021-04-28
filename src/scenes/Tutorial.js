@@ -12,6 +12,7 @@ class Tutorial extends Phaser.Scene {
         this.back.setInteractive();
 
         this.back.on("pointerdown", () => {
+            this.sound.play('button');
             this.scene.start("menuScene");
         })
     }
