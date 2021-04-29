@@ -9,6 +9,7 @@ class Menu extends Phaser.Scene{
         this.load.image('title', './assets/title3.png');
         this.load.image('lines','./assets/lines.png');
         this.load.audio('button', './assets/button.wav')
+        //this.load.spritesheet('obstacles','./assets/obstacles.png','./assets/obstacles.json')
     }
     
     create() {

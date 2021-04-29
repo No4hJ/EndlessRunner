@@ -29,8 +29,11 @@ let scoreConfig = {
 };
 
 let lane; //player's lane
-let xCo; //x coordinate of obstacles
+let xCo, xCo1, xCo2; //x coordinate of obstacles
 let yCo = 200;//y coordiate of obstacles
+//let obsFrame = 2;// frame for obstacles
+//let damage;//damage per obstacles
+//let appear;
 let keyA, keyD, keyLEFT, keyRIGHT; //reserve key
-let startCheck = false; //start checking collision
+let startCheck, startCheckMid, startCheckbig = false; //start checking collision
 let isLeft, isRight; //used to control obstacle movement
