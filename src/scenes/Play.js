@@ -8,19 +8,23 @@ class Play extends Phaser.Scene{
         this.load.image('earth', './assets/earth_.png');
         this.load.image('stone', './assets/stone.png');
         this.load.image('ship', './assets/spaceship.png');
+        this.load.image('left', './assets/left.png');
+        this.load.image('right', './assets/right.png');
+        this.load.image('shipred', './assets/spaceshipdamaged.png');
         this.load.spritesheet('obstacles','./assets/obstacles.png',{
             frameWidth: 96,
             frameHeight: 64,
             startFrame: 0,
             endFrame:2
         });
+        this.load.image('mileui','./assets/MilesUI.png');
     }
 
     create() {        
         //condition of game ending
         lane = 2; //intialize lane
         this.gameOver = false; //game end or not
-        this.hp = 20; //initialize health
+        this.hp = 2; //initialize health
         this.isSpawn = true; //spawn obstacle or not
 
         this.distanceText;
@@ -47,12 +51,10 @@ class Play extends Phaser.Scene{
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-
-        this.ship = this.add.sprite(320,240,'ship').setScale(1);
         
         //spawn obstacles
         this.spawntimer = this.time.addEvent({
-            delay: 5000,                // ms
+            delay: 3000,                // ms
             callback: () => {
                 xCo = Math.floor(Math.random() * game.config.width);
                 xCo1 = Math.floor(Math.random() * game.config.width);
@@ -68,12 +70,22 @@ class Play extends Phaser.Scene{
         this.obstacle = new Obstacle(this, xCo, 100, 'obstacles', 0, 1).setScale(1); //obstacle
         this.mid = new Obstaclemid(this, xCo1, 100, 'obstacles', 1, 2).setScale(1); //obstacle
         this.big = new Obstaclebig(this, xCo2, 100, 'obstacles', 2, 2).setScale(1); //obstacle
+        //this.mid.setVisible(false);
+        //this.big.setVisible(false);
 
-        console.log(this.obstacle.getBounds());
-        console.log(this.ship.getBounds()); 
+        //console.log(this.obstacle.getBounds());
+        //console.log(this.ship.getBounds()); 
         //timer or travel how long
-        this.distanceText = this.add.text(50,50, 'You have traveled ' + this.distance +' miles.', scoreConfig);
-        
+        this.left = this.add.sprite(320,240,'left').setScale(1).setInteractive();
+        this.right = this.add.sprite(320,240,'right').setScale(1).setInteractive();
+        this.ship = this.add.sprite(320,240,'ship').setScale(1).setInteractive();
+        this.left.setVisible(false);
+        this.right.setVisible(false);
+
+        this.shipred = this.add.sprite(320,240,'shipred').setScale(1).setInteractive();
+        this.shipred.setVisible(false);
+        this.distanceText = this.add.text(64,38, this.distance +' miles.', scoreConfig);
+        this.mileui = this.add.image(125,50, "mileui").setScale(1.1);
         //Gameover text
         //this.gameOvertext= this.add.text(220, 240, 'GAME OVER',scoreConfig).setOrigin(0.0);
         //this.gameOvertext.setVisible(false);
@@ -81,7 +93,8 @@ class Play extends Phaser.Scene{
 
 
     update() {
-        if(Math.floor(this.obstacle.scaleX) == 5) {
+        this.shipred.setVisible(false);
+        if(Math.floor(this.obstacle.scaleX) == 3) {
             startCheck = true;
         }
 
@@ -92,6 +105,7 @@ class Play extends Phaser.Scene{
                 //this.ship.setTint(0xff0000);
                 this.obstacle.reset();
                 this.hp -= 1;
+                this.shipred.setVisible(true);
                 console.log("hit!");
                 console.log(this.hp);
                 //this.distance += 1;
@@ -106,7 +120,7 @@ class Play extends Phaser.Scene{
             }
         }
 
-        if(Math.floor(this.mid.scaleX) == 5) {
+        if(Math.floor(this.mid.scaleX) == 4) {
             startCheckMid = true;
         }
 
@@ -117,6 +131,7 @@ class Play extends Phaser.Scene{
                 //this.ship.setTint(0xff0000);
                 this.mid.reset();
                 this.hp -= 2;
+                this.shipred.setVisible(true);
                 console.log("hit! #mid");
                 console.log(this.hp);
                 //this.distance += 1;
@@ -142,6 +157,7 @@ class Play extends Phaser.Scene{
                 //this.ship.setTint(0xff0000);
                 this.big.reset();
                 this.hp -= 1;
+                this.shipred.setVisible(true);
                 console.log("hit! #big");
                 console.log(this.hp);
                 //this.distance += 1;
@@ -163,13 +179,32 @@ class Play extends Phaser.Scene{
 
         this.distanceTimer = setInterval(this.distanceCheck(),1000);
         
-        if(this.hp == 0) {
+        if(this.hp <= 0) {
             this.gameOver = true;
+            console.log(this.distance);
+            playerscore = this.distance;
         }
 
         if(this.gameOver) {
             //this.gameOvertext.setVisible(false);
-            this.scene.start('menuScene');
+            this.scene.start('GameoverScene');
+        }
+        
+        if(isLeft){
+            this.ship.setVisible(false);
+            this.left.setVisible(true);
+        }
+        else{
+            this.ship.setVisible(true);
+            this.left.setVisible(false);
+        }
+        if(isRight){
+            this.ship.setVisible(false);
+            this.right.setVisible(true);
+        }
+        else{
+            this.ship.setVisible(true);
+            this.right.setVisible(false);
         }
         
     }
@@ -182,7 +217,10 @@ class Play extends Phaser.Scene{
 
     distanceCheck(){
         this.distance +=1;
-        this.distanceText=this.add.text(50,50, 'You have traveled ' + this.distance +' miles.', scoreConfig);
+        this.distanceText=this.add.text(64,38,this.distance +' Miles', scoreConfig);
     }
+    //setTint(){
+    //    this.ship.setTint(0xff0000);
+    //}
 
 }

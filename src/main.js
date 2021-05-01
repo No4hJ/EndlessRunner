@@ -3,7 +3,7 @@ let config = {
     type: Phaser.CANVAS,
     width: 640,
     height: 480,
-    scene: [ Menu, Play, Credit, Tutorial ],
+    scene: [ Menu, Play, Credit, Tutorial,Gameover ],
     physics: {
         default: 'arcade',
         arcade: {
@@ -16,15 +16,15 @@ let game = new Phaser.Game(config);
 
 //globalized text font
 let scoreConfig = {
-    fontFamily: 'Courier',
-    fontSize: '28px',
-    backgroundColor: '#F3B141',
-    color: '#843605',
+    fontFamily: 'system-ui',
+    fontSize: '21px',
+    backgroundColor: '#2f4673',
+    color: '#6b97bb',
     align: 'right',
-    padding: {
-        top: 5,
-        bottom: 5,
-    },
+    //padding: {
+    //    top: 5,
+    //    bottom: 5,
+    //},
     fixedWidth: 0
 };
 
@@ -37,3 +37,4 @@ let yCo = 200;//y coordiate of obstacles
 let keyA, keyD, keyLEFT, keyRIGHT; //reserve key
 let startCheck, startCheckMid, startCheckbig = false; //start checking collision
 let isLeft, isRight; //used to control obstacle movement
+let playerscore = 0;//record the players score

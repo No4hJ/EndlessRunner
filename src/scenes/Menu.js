@@ -5,11 +5,13 @@ class Menu extends Phaser.Scene{
 
     //load images
     preload() {
-        this.load.image('play', './assets/gear.png');
         this.load.image('title', './assets/title3.png');
         this.load.image('lines','./assets/lines.png');
         this.load.audio('button', './assets/button.wav')
         //this.load.spritesheet('obstacles','./assets/obstacles.png','./assets/obstacles.json')
+        this.load.image('play','./assets/Play.png');
+        this.load.image('credits','./assets/Credits.png');
+        this.load.image('tutorial','./assets/Tutorial.png');
     }
     
     create() {
@@ -29,15 +31,13 @@ class Menu extends Phaser.Scene{
         ]);
         //create title
         this.title = this.add.image(game.config.width / 2, game.config.height / 4, "title");
-        // create the buttons 
-        this.playbutton =  this.add.text(200,200, "Play", scoreConfig);
-        this.creditbutton = this.add.text(200,250, "Credit", scoreConfig);
-        this.tutorialbutton = this.add.text(200,300, "Tutorial", scoreConfig)
-
-        // make the buttons clickable
-        this.playbutton.setInteractive();
-        this.creditbutton.setInteractive();
-        this.tutorialbutton.setInteractive();
+        // create the buttons +  make the buttons clickable
+        //this.playbutton =  this.add.text(200,200, "Play", scoreConfig);
+        this.playbutton =  this.add.image(300,250, "play").setInteractive();
+        //this.creditbutton = this.add.text(200,250, "Credit", scoreConfig);
+        //this.tutorialbutton = this.add.text(200,300, "Tutorial", scoreConfig)
+        this.creditbutton = this.add.image(300,300, "credits").setInteractive();
+        this.tutorialbutton = this.add.image(300,350, "tutorial").setInteractive();
         
         //go to play when click play
         this.playbutton.on('pointerdown', () => {
