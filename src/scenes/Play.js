@@ -18,14 +18,61 @@ class Play extends Phaser.Scene{
             endFrame:2
         });
         this.load.image('mileui','./assets/MilesUI.png');
+        this.load.spritesheet('leftgif','./assets/leftgif.png',{
+            frameWidth: 640,
+            frameHeight: 480,
+            startFrame: 0,
+            endFrame:3
+        });
+        this.load.spritesheet('rightgif','./assets/rightgif.png',{
+            frameWidth: 640,
+            frameHeight: 480,
+            startFrame: 0,
+            endFrame:3
+        });
+        this.load.spritesheet('spaceship_red','./assets/spaceship_red.png',{
+            frameWidth: 640,
+            frameHeight: 480,
+            startFrame: 0,
+            endFrame:6
+        });
     }
 
     create() {        
         //condition of game ending
         lane = 2; //intialize lane
         this.gameOver = false; //game end or not
-        this.hp = 2; //initialize health
+        this.hp = 20; //initialize health
         this.isSpawn = true; //spawn obstacle or not
+
+        this.anims.create({
+            key:'rightgif',
+            frames: this.anims.generateFrameNumbers('rightgif',{
+                start: 0,
+                end:3,
+                first: 0
+            }),
+            frameRate: 8
+        });
+
+        this.anims.create({
+            key:'spaceship_red',
+            frames: this.anims.generateFrameNumbers('spaceship_red',{
+                start: 0,
+                end:6,
+            }),
+            frameRate: 8
+        });
+
+        this.anims.create({
+            key:'leftgif',
+            frames: this.anims.generateFrameNumbers('leftgif',{
+                start: 0,
+                end:3,
+                first: 0
+            }),
+            frameRate: 8
+        });
 
         this.distanceText;
         this.distance = 0;
@@ -76,14 +123,20 @@ class Play extends Phaser.Scene{
         //console.log(this.obstacle.getBounds());
         //console.log(this.ship.getBounds()); 
         //timer or travel how long
-        this.left = this.add.sprite(320,240,'left').setScale(1).setInteractive();
-        this.right = this.add.sprite(320,240,'right').setScale(1).setInteractive();
-        this.ship = this.add.sprite(320,240,'ship').setScale(1).setInteractive();
-        this.left.setVisible(false);
-        this.right.setVisible(false);
 
-        this.shipred = this.add.sprite(320,240,'shipred').setScale(1).setInteractive();
-        this.shipred.setVisible(false);
+        //this.left = this.add.sprite(320,240,'left').setScale(1).setInteractive();
+        //this.right = this.add.sprite(320,240,'right').setScale(1).setInteractive();
+        this.ship = this.add.sprite(320,240,'ship').setScale(1).setInteractive();
+        //this.left.setVisible(false);
+        //this.right.setVisible(false);
+
+        //this.shipred = this.add.sprite(320,240,'shipred').setScale(1).setInteractive();
+        //this.shipred.setVisible(false);
+        
+        this.playright = this.add.sprite(0, 0, 'rightgif').setOrigin(0, 0);
+        this.playleft = this.add.sprite(0, 0, 'leftgif').setOrigin(0, 0);
+        this.spaceship_red = this.add.sprite(0, 0, 'spaceship_red').setOrigin(0, 0);
+
         this.distanceText = this.add.text(64,38, this.distance +' miles.', scoreConfig);
         this.mileui = this.add.image(125,50, "mileui").setScale(1.1);
         //Gameover text
@@ -93,7 +146,7 @@ class Play extends Phaser.Scene{
 
 
     update() {
-        this.shipred.setVisible(false);
+        //this.shipred.setVisible(false);
         if(Math.floor(this.obstacle.scaleX) == 3) {
             startCheck = true;
         }
@@ -105,7 +158,8 @@ class Play extends Phaser.Scene{
                 //this.ship.setTint(0xff0000);
                 this.obstacle.reset();
                 this.hp -= 1;
-                this.shipred.setVisible(true);
+                //this.shipred.setVisible(true);
+                this.damamgedship();
                 console.log("hit!");
                 console.log(this.hp);
                 //this.distance += 1;
@@ -131,7 +185,8 @@ class Play extends Phaser.Scene{
                 //this.ship.setTint(0xff0000);
                 this.mid.reset();
                 this.hp -= 2;
-                this.shipred.setVisible(true);
+                this.damamgedship();
+                //this.shipred.setVisible(true);
                 console.log("hit! #mid");
                 console.log(this.hp);
                 //this.distance += 1;
@@ -157,7 +212,8 @@ class Play extends Phaser.Scene{
                 //this.ship.setTint(0xff0000);
                 this.big.reset();
                 this.hp -= 1;
-                this.shipred.setVisible(true);
+                this.damamgedship();
+                //this.shipred.setVisible(true);
                 console.log("hit! #big");
                 console.log(this.hp);
                 //this.distance += 1;
@@ -192,20 +248,25 @@ class Play extends Phaser.Scene{
         
         if(isLeft){
             this.ship.setVisible(false);
-            this.left.setVisible(true);
-        }
-        else{
-            this.ship.setVisible(true);
-            this.left.setVisible(false);
+            this.playleft.setVisible(true);  
+            //let playleft = this.add.sprite(0, 0, 'leftgif').setOrigin(0, 0);
+            this.playleft.anims.play('leftgif');
+            this.playleft.on('animationcomplete', () => {    // callback after anim completes
+                this.ship.setVisible(true);                      // make ship visible again
+                this.playleft.setVisible(false);                       // remove explosion sprite
+              });
         }
         if(isRight){
             this.ship.setVisible(false);
-            this.right.setVisible(true);
+            this.playright.setVisible(true);
+            //let playright = this.add.sprite(0, 0, 'rightgif').setOrigin(0, 0);
+            this.playright.anims.play('rightgif');
+            this.playright.on('animationcomplete', () => {    // callback after anim completes
+                this.ship.setVisible(true);                      // make ship visible again
+                this.playright.setVisible(false);                       // remove explosion sprite
+              });
         }
-        else{
-            this.ship.setVisible(true);
-            this.right.setVisible(false);
-        }
+
         
     }
     
@@ -222,5 +283,15 @@ class Play extends Phaser.Scene{
     //setTint(){
     //    this.ship.setTint(0xff0000);
     //}
+    damamgedship(){
+        this.ship.setVisible(false);
+        this.spaceship_red.setVisible(true);
+        //let playright = this.add.sprite(0, 0, 'rightgif').setOrigin(0, 0);
+        this.spaceship_red.anims.play('spaceship_red');
+        this.spaceship_red.on('animationcomplete', () => {    // callback after anim completes
+            this.ship.setVisible(true);                      // make ship visible again
+            this.spaceship_red.setVisible(false);                       // remove explosion sprite
+        });
+    }
 
 }
