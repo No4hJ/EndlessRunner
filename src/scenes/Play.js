@@ -168,13 +168,15 @@ class Play extends Phaser.Scene{
 
 
     update() {
+        //console.log(new Date().getSeconds(), new Date().getMilliseconds());
+
         //this.shipred.setVisible(false);
         if(Math.floor(this.obstacle.scaleX) == 5) {
             startCheck = true;
         }
 
         if(startCheck) {
-            console.log(this.checkCollision(this.ship,this.obstacle));
+            //console.log(this.checkCollision(this.ship,this.obstacle));
             if (this.checkCollision(this.ship,this.obstacle)) {
                 startCheck = false;
                 //this.ship.setTint(0xff0000);
@@ -203,7 +205,7 @@ class Play extends Phaser.Scene{
         }
 
         if(startCheckMid) {
-            console.log(this.checkCollision(this.ship,this.mid));
+            //console.log(this.checkCollision(this.ship,this.mid));
             if (this.checkCollision(this.ship,this.mid)) {
                 startCheckMid = false;
                 //this.ship.setTint(0xff0000);
@@ -232,7 +234,7 @@ class Play extends Phaser.Scene{
         }
 
         if(startCheckbig) {
-            console.log(this.checkCollision(this.ship,this.big));
+            //console.log(this.checkCollision(this.ship,this.big));
             if (this.checkCollision(this.ship,this.big)) {
                 startCheckbig = false;
                 //this.ship.setTint(0xff0000);
@@ -285,23 +287,23 @@ class Play extends Phaser.Scene{
         }
         
         if(isLeft){
-            this.ship.setVisible(false);
-            this.playleft.setVisible(true);  
+            this.ship.alpha = 0;
+            this.playleft.alpha = 1;  
             //let playleft = this.add.sprite(0, 0, 'leftgif').setOrigin(0, 0);
             this.playleft.anims.play('leftgif');
             this.playleft.on('animationcomplete', () => {    // callback after anim completes
-                this.ship.setVisible(true);                      // make ship visible again
-                this.playleft.setVisible(false);                       // remove explosion sprite
+                this.ship.alpha = 1;                      // make ship visible again
+                this.playleft.alpha = 0;                       // remove explosion sprite
               });
         }
         if(isRight){
-            this.ship.setVisible(false);
-            this.playright.setVisible(true);
+            this.ship.alpha = 0;
+            this.playright.alpha = 1;
             //let playright = this.add.sprite(0, 0, 'rightgif').setOrigin(0, 0);
             this.playright.anims.play('rightgif');
             this.playright.on('animationcomplete', () => {    // callback after anim completes
-                this.ship.setVisible(true);                      // make ship visible again
-                this.playright.setVisible(false);                       // remove explosion sprite
+                this.ship.alpha = 1;                      // make ship visible again
+                this.playright.alpha = 0;                       // remove explosion sprite
               });
         }
 
@@ -322,13 +324,13 @@ class Play extends Phaser.Scene{
     //    this.ship.setTint(0xff0000);
     //}
     damamgedship(){
-        this.ship.setVisible(false);
-        this.spaceship_red.setVisible(true);
+        this.ship.alpha = 0;
+        this.spaceship_red.alpha = 1;
         //let playright = this.add.sprite(0, 0, 'rightgif').setOrigin(0, 0);
         this.spaceship_red.anims.play('spaceship_red');
         this.spaceship_red.on('animationcomplete', () => {    // callback after anim completes
-            this.ship.setVisible(true);                      // make ship visible again
-            this.spaceship_red.setVisible(false);                       // remove explosion sprite
+            this.ship.alpha = 1;                      // make ship visible again
+            this.spaceship_red.alpha = 0;                       // remove explosion sprite
         });
     }
     randomnum(){
