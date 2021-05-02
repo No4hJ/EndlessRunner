@@ -40,3 +40,5 @@ let keyA, keyD, keyLEFT, keyRIGHT; //reserve key
 let startCheck, startCheckMid, startCheckbig = false; //start checking collision
 let isLeft, isRight; //used to control obstacle movement
 let playerscore = 0;//record the players score
+let highscore = []; //store scores and find the highest
+let menumusic, playmusic; //bgm musics

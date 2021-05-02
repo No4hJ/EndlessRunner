@@ -3,8 +3,9 @@ class Play extends Phaser.Scene{
         super("playScene");
     }
 
-    //load images
+    //load images & sounds
     preload() {
+        this.load.audio('playbgm', './assets/void_ingame.wav');
         this.load.image('earth', './assets/earth_.png');
         this.load.image('stone', './assets/stone.png');
         this.load.image('ship', './assets/spaceship.png');
@@ -38,11 +39,18 @@ class Play extends Phaser.Scene{
         });
     }
 
-    create() {        
+    create() {      
+        menumusic.stop();
+        //create music and config  
+        playmusic = this.sound.add('playbgm', {
+            volume: 0.1,
+            loop: true,
+        });
+
         //condition of game ending
         lane = 2; //intialize lane
         this.gameOver = false; //game end or not
-        this.hp = 20; //initialize health
+        this.hp = 2; //initialize health
         this.isSpawn = true; //spawn obstacle or not
 
         this.anims.create({
@@ -142,6 +150,19 @@ class Play extends Phaser.Scene{
         //Gameover text
         //this.gameOvertext= this.add.text(220, 240, 'GAME OVER',scoreConfig).setOrigin(0.0);
         //this.gameOvertext.setVisible(false);
+
+        //play the bgm
+        if (!this.sound.locked)
+        {
+            // already unlocked so play
+            playmusic.play()
+        }
+        else {
+            // wait for 'unlocked' to fire and then play
+            this.sound.once(Phaser.Sound.Events.UNLOCKED, () => {
+                playmusic.play()
+            })
+        }
     }
 
 
@@ -235,14 +256,14 @@ class Play extends Phaser.Scene{
 
         this.distanceTimer = setInterval(this.distanceCheck(),1000);
         
-        if(this.hp <= 0) {
+        if(this.hp <= 0) { //gameover condition
             this.gameOver = true;
-            console.log(this.distance);
-            playerscore = this.distance;
         }
 
         if(this.gameOver) {
             //this.gameOvertext.setVisible(false);
+            playmusic.stop();
+            playerscore = this.distance;
             this.scene.start('GameoverScene');
         }
         
