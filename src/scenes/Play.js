@@ -7,11 +7,7 @@ class Play extends Phaser.Scene{
     preload() {
         this.load.audio('playbgm', './assets/void_ingame.wav');
         this.load.image('earth', './assets/earth_.png');
-        this.load.image('stone', './assets/stone.png');
         this.load.image('ship', './assets/spaceship.png');
-        this.load.image('left', './assets/left.png');
-        this.load.image('right', './assets/right.png');
-        this.load.image('shipred', './assets/spaceshipdamaged.png');
         this.load.spritesheet('obstacles','./assets/obstacles.png',{
             frameWidth: 96,
             frameHeight: 64,
@@ -43,7 +39,7 @@ class Play extends Phaser.Scene{
         menumusic.stop();
         //create music and config  
         playmusic = this.sound.add('playbgm', {
-            volume: 0.1,
+            volume: 0.5,
             loop: true,
         });
 
@@ -54,7 +50,7 @@ class Play extends Phaser.Scene{
         this.isSpawn = true; //spawn obstacle or not
 
         this.anims.create({
-            key:'rightgif',
+            key:'right',
             frames: this.anims.generateFrameNumbers('rightgif',{
                 start: 0,
                 end:3,
@@ -64,7 +60,7 @@ class Play extends Phaser.Scene{
         });
 
         this.anims.create({
-            key:'spaceship_red',
+            key:'shipred',
             frames: this.anims.generateFrameNumbers('spaceship_red',{
                 start: 0,
                 end:6,
@@ -73,7 +69,7 @@ class Play extends Phaser.Scene{
         });
 
         this.anims.create({
-            key:'leftgif',
+            key:'left',
             frames: this.anims.generateFrameNumbers('leftgif',{
                 start: 0,
                 end:3,
@@ -107,50 +103,39 @@ class Play extends Phaser.Scene{
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         
-        //spawn obstacles
-        //this.spawntimer = this.time.addEvent({
-        //   delay: 5000,                // ms
-        //   callback: () => {
-        //       xCo = Math.floor(Math.random() * game.config.width);
-        //       xCo1 = Math.floor(Math.random() * game.config.width);
-        //        xCo2 = Math.floor(Math.random() * game.config.width);
-                //appear = Math.floor(Math.random() * 2);
-                //obsFrame = Math.floor(Math.random()*3);
-                //console.log(xCo, xCo1,xCo2);
-        //    },
-        //    callbackScope: null,
-        //    loop: true
-        //});
-        
         this.obstacle = new Obstacle(this, xCo, 100, 'obstacles', 0, 1).setScale(1); //obstacle
         this.mid = new Obstaclemid(this, xCo1, 100, 'obstacles', 1, 2).setScale(1); //obstacle
-        this.big = new Obstaclebig(this, xCo2, 100, 'obstacles', 2, 3).setScale(1); //obstacle
+        this.big = new Obstaclebig(this, xCo2, 100, 'obstacles', 2, 3).setScale(2); //obstacle
+        this.obstacle.angle = turn;
+        this.mid.angle = turn;
+        this.big.angle = turn;
         this.obstacle.alpha = 0;
         this.mid.alpha = 0;
         this.big.alpha = 0;
 
-        //console.log(this.obstacle.getBounds());
-        //console.log(this.ship.getBounds()); 
-        //timer or travel how long
-
-        //this.left = this.add.sprite(320,240,'left').setScale(1).setInteractive();
-        //this.right = this.add.sprite(320,240,'right').setScale(1).setInteractive();
         this.ship = this.add.sprite(320,240,'ship').setScale(1).setInteractive();
-        //this.left.setVisible(false);
-        //this.right.setVisible(false);
-
-        //this.shipred = this.add.sprite(320,240,'shipred').setScale(1).setInteractive();
-        //this.shipred.setVisible(false);
         
         this.playright = this.add.sprite(0, 0, 'rightgif').setOrigin(0, 0);
         this.playleft = this.add.sprite(0, 0, 'leftgif').setOrigin(0, 0);
         this.spaceship_red = this.add.sprite(0, 0, 'spaceship_red').setOrigin(0, 0);
+        this.playright.alpha = 0;
+        this.playleft.alpha = 0;
+        this.spaceship_red.alpha = 0;
 
-        this.distanceText = this.add.text(64,38, this.distance +' miles.', scoreConfig);
+        
         this.mileui = this.add.image(125,50, "mileui").setScale(1.1);
-        //Gameover text
-        //this.gameOvertext= this.add.text(220, 240, 'GAME OVER',scoreConfig).setOrigin(0.0);
-        //this.gameOvertext.setVisible(false);
+        this.distanceText = this.add.text(64,38, this.distance +' Miles', scoreConfig);
+        this.time.addEvent({
+               delay: 50,                // ms
+               callback: () => {
+                   this.distance += 5;
+                   this.distanceText.text = this.distance + ' Miles';
+                },
+                callbackScope: null,
+                loop: true
+            });
+    
+       
 
         //play the bgm
         if (!this.sound.locked)
@@ -168,35 +153,26 @@ class Play extends Phaser.Scene{
 
 
     update() {
-        //console.log(new Date().getSeconds(), new Date().getMilliseconds());
-
-        //this.shipred.setVisible(false);
-        if(Math.floor(this.obstacle.scaleX) == 5) {
+        //enlarge obstacle (small)
+        if(Math.floor(this.obstacle.scaleX) == 4) {
             startCheck = true;
         }
 
+        //check collision
         if(startCheck) {
-            //console.log(this.checkCollision(this.ship,this.obstacle));
             if (this.checkCollision(this.ship,this.obstacle)) {
                 startCheck = false;
-                //this.ship.setTint(0xff0000);
-                this.obstacle.reset();
                 this.hp -= 1;
-                //this.shipred.setVisible(true);
                 this.damamgedship();
                 console.log("hit!");
                 console.log(this.hp);
                 this.randomnum();
-                //this.distance += 1;
-                //this.score.text = this.distance;
-
+                this.obstacle.reset();
             } else {
                 startCheck = false;
-                this.obstacle.reset();
                 console.log("miss!");
                 this.randomnum();
-                //this.distance += 1;
-                //this.score.text = this.distance;
+                this.obstacle.reset();
             }
         }
 
@@ -205,82 +181,65 @@ class Play extends Phaser.Scene{
         }
 
         if(startCheckMid) {
-            //console.log(this.checkCollision(this.ship,this.mid));
+            console.log("yes");
+            console.log(this.checkCollision(this.ship,this.mid));
             if (this.checkCollision(this.ship,this.mid)) {
                 startCheckMid = false;
-                //this.ship.setTint(0xff0000);
-                this.mid.reset();
                 this.hp -= 2;
                 this.damamgedship();
-                //this.shipred.setVisible(true);
                 console.log("hit! #mid");
                 console.log(this.hp);
                 this.randomnum();
-                //this.distance += 1;
-                //this.score.text = this.distance;
-
-            } else {
-                startCheck = false;
                 this.mid.reset();
+            } else {
+                startCheckMid = false;
                 console.log("miss! #mid");
                 this.randomnum();
-                //this.distance += 1;
-                //this.score.text = this.distance;
+                this.mid.reset();
             }
         }
 
-        if(Math.floor(this.big.scaleX) == 5) {
+        if(Math.floor(this.big.scaleX) == 7) {
             startCheckbig = true;
         }
 
         if(startCheckbig) {
-            //console.log(this.checkCollision(this.ship,this.big));
             if (this.checkCollision(this.ship,this.big)) {
                 startCheckbig = false;
-                //this.ship.setTint(0xff0000);
-                this.big.reset();
-                this.hp -= 1;
+                this.hp -= 3;
                 this.damamgedship();
-                //this.shipred.setVisible(true);
                 console.log("hit! #big");
                 console.log(this.hp);
                 this.randomnum();
-                //this.distance += 1;
-                //this.score.text = this.distance;
-
+                this.big.reset();
             } else {
                 startCheckbig = false;
-                this.big.reset();
                 console.log("miss! #big");
                 this.randomnum();
-                //this.distance += 1;
-                //this.score.text = this.distance;
+                this.big.reset();
             }
         }
 
         this.background.update(); 
         
-        if(appear==0){
+        if(appear==0) {
             this.obstacle.update();
             this.obstacle.alpha = 1;
 
-        
-        }else if(appear == 1)
-            {this.mid.update();
+        }else if(appear == 1) {
+            this.mid.update();
             this.mid.alpha = 1;
         
-        }else{this.big.update();
+        }else if(appear == 2) {
+            this.big.update();
             this.big.alpha = 1;
         }
-
-        this.distanceTimer = setInterval(this.distanceCheck(),1000);
         
         if(this.hp <= 0) { //gameover condition
             this.gameOver = true;
         }
 
         if(this.gameOver) {
-            //this.gameOvertext.setVisible(false);
             playmusic.stop();
             playerscore = this.distance;
             this.scene.start('GameoverScene');
@@ -288,9 +247,9 @@ class Play extends Phaser.Scene{
         
         if(isLeft){
             this.ship.alpha = 0;
-            this.playleft.alpha = 1;  
-            //let playleft = this.add.sprite(0, 0, 'leftgif').setOrigin(0, 0);
-            this.playleft.anims.play('leftgif');
+            this.playright.alpha = 0;
+            this.playleft.alpha = 1;
+            this.playleft.anims.play('left');
             this.playleft.on('animationcomplete', () => {    // callback after anim completes
                 this.ship.alpha = 1;                      // make ship visible again
                 this.playleft.alpha = 0;                       // remove explosion sprite
@@ -298,13 +257,13 @@ class Play extends Phaser.Scene{
         }
         if(isRight){
             this.ship.alpha = 0;
+            this.playleft.alpha = 0;
             this.playright.alpha = 1;
-            //let playright = this.add.sprite(0, 0, 'rightgif').setOrigin(0, 0);
-            this.playright.anims.play('rightgif');
+            this.playright.anims.play('right');
             this.playright.on('animationcomplete', () => {    // callback after anim completes
                 this.ship.alpha = 1;                      // make ship visible again
                 this.playright.alpha = 0;                       // remove explosion sprite
-              });
+              }); 
         }
 
         
@@ -316,28 +275,27 @@ class Play extends Phaser.Scene{
         return Phaser.Geom.Intersects.RectangleToRectangle(obstacles.getBounds(), ship.getBounds());
     }
 
-    distanceCheck(){
-        this.distance +=1;
-        this.distanceText=this.add.text(64,38,this.distance +' Miles', scoreConfig);
-    }
-    //setTint(){
-    //    this.ship.setTint(0xff0000);
-    //}
     damamgedship(){
         this.ship.alpha = 0;
+        this.playleft.alpha = 0;
+        this.playright.alpha = 0;
         this.spaceship_red.alpha = 1;
-        //let playright = this.add.sprite(0, 0, 'rightgif').setOrigin(0, 0);
-        this.spaceship_red.anims.play('spaceship_red');
+        this.spaceship_red.anims.play('shipred');
+
         this.spaceship_red.on('animationcomplete', () => {    // callback after anim completes
             this.ship.alpha = 1;                      // make ship visible again
             this.spaceship_red.alpha = 0;                       // remove explosion sprite
-        });
+        }); 
     }
+
     randomnum(){
-        appear = Math.floor(Math.random() * 2);
+        turn = Math.floor(Math.random() * 360);
+        appear = Math.floor(Math.random() * 3);
         xCo = Math.floor(Math.random() * game.config.width);
         xCo1 = Math.floor(Math.random() * game.config.width);
         xCo2 = Math.floor(Math.random() * game.config.width);
+        console.log(turn);
+        console.log(xCo);
     }
 
 }

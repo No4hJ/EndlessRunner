@@ -51,7 +51,7 @@ class Obstaclebig extends Phaser.GameObjects.Sprite {
         this.alpha = 0; //make it invisble for a sec
         this.x = xCo2;
         this.y = yCo; //back to intial position
-        this.angle = 0;
+        this.angle = turn;
         this.scaleX = 1; //back to initial size
         this.scaleY = 1; // back to initial size
 

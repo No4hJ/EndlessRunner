@@ -15,8 +15,8 @@ class Obstacle extends Phaser.GameObjects.Sprite {
 
         //before it reach the edge
         if(!startCheck) {
-            this.scaleX += .01;
-            this.scaleY += .01;
+            this.scaleX += .011;
+            this.scaleY += .011;
             this.x += .05;
             this.y += .05;
         }
@@ -51,7 +51,7 @@ class Obstacle extends Phaser.GameObjects.Sprite {
         this.alpha = 0; //make it invisble for a sec
         this.x = xCo;
         this.y = yCo; //back to intial position
-        this.angle = 0;
+        this.angle = turn;
         this.scaleX = 1; //back to initial size
         this.scaleY = 1; // back to initial size
 

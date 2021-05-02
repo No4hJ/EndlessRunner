@@ -45,7 +45,7 @@ class Gameover extends Phaser.Scene {
         //this.distanceText = this.add.text(50,250,'You have traveled ' + this.playerscore +' Miles', scoreConfig);
         this.distanceText = this.add.text(130,200,'You have traveled ' + playerscore +' Miles!', scoreConfig);
         scoreConfig.color='#D4AF37';
-        this.highestscore = this.add.text(190,240,'Highest Score: ' + this.hs,scoreConfig);
+        this.highestscore = this.add.text(190,240,'Highest Score: ' + this.hs, scoreConfig);
         //this.highestscore.setVisible(false);
 
         //go back to menu
