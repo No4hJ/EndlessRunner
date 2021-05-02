@@ -35,7 +35,7 @@ let xCo2 = Math.floor(Math.random() * game.config.width); //x coordinate of obst
 let yCo = 200;//y coordiate of obstacles
 //let obsFrame = 2;// frame for obstacles
 //let damage;//damage per obstacles
-let appear = Math.floor(Math.random() * 3);
+let appear = Math.floor(Math.random() * 2);
 let keyA, keyD, keyLEFT, keyRIGHT; //reserve key
 let startCheck, startCheckMid, startCheckbig = false; //start checking collision
 let isLeft, isRight; //used to control obstacle movement

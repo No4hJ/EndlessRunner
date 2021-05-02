@@ -50,7 +50,7 @@ class Play extends Phaser.Scene{
         //condition of game ending
         lane = 2; //intialize lane
         this.gameOver = false; //game end or not
-        this.hp = 2; //initialize health
+        this.hp = 5; //initialize health
         this.isSpawn = true; //spawn obstacle or not
 
         this.anims.create({
@@ -108,25 +108,26 @@ class Play extends Phaser.Scene{
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         
         //spawn obstacles
-        this.spawntimer = this.time.addEvent({
-            delay: 3000,                // ms
-            callback: () => {
-                xCo = Math.floor(Math.random() * game.config.width);
-                xCo1 = Math.floor(Math.random() * game.config.width);
-                xCo2 = Math.floor(Math.random() * game.config.width);
-                //appear = Math.floor(Math.random() * 3);
+        //this.spawntimer = this.time.addEvent({
+        //   delay: 5000,                // ms
+        //   callback: () => {
+        //       xCo = Math.floor(Math.random() * game.config.width);
+        //       xCo1 = Math.floor(Math.random() * game.config.width);
+        //        xCo2 = Math.floor(Math.random() * game.config.width);
+                //appear = Math.floor(Math.random() * 2);
                 //obsFrame = Math.floor(Math.random()*3);
-                console.log(xCo, xCo1,xCo2);
-            },
-            callbackScope: null,
-            loop: true
-        });
+                //console.log(xCo, xCo1,xCo2);
+        //    },
+        //    callbackScope: null,
+        //    loop: true
+        //});
         
         this.obstacle = new Obstacle(this, xCo, 100, 'obstacles', 0, 1).setScale(1); //obstacle
         this.mid = new Obstaclemid(this, xCo1, 100, 'obstacles', 1, 2).setScale(1); //obstacle
-        this.big = new Obstaclebig(this, xCo2, 100, 'obstacles', 2, 2).setScale(1); //obstacle
-        //this.mid.setVisible(false);
-        //this.big.setVisible(false);
+        this.big = new Obstaclebig(this, xCo2, 100, 'obstacles', 2, 3).setScale(1); //obstacle
+        this.obstacle.alpha = 0;
+        this.mid.alpha = 0;
+        this.big.alpha = 0;
 
         //console.log(this.obstacle.getBounds());
         //console.log(this.ship.getBounds()); 
@@ -168,7 +169,7 @@ class Play extends Phaser.Scene{
 
     update() {
         //this.shipred.setVisible(false);
-        if(Math.floor(this.obstacle.scaleX) == 3) {
+        if(Math.floor(this.obstacle.scaleX) == 5) {
             startCheck = true;
         }
 
@@ -183,6 +184,7 @@ class Play extends Phaser.Scene{
                 this.damamgedship();
                 console.log("hit!");
                 console.log(this.hp);
+                this.randomnum();
                 //this.distance += 1;
                 //this.score.text = this.distance;
 
@@ -190,12 +192,13 @@ class Play extends Phaser.Scene{
                 startCheck = false;
                 this.obstacle.reset();
                 console.log("miss!");
+                this.randomnum();
                 //this.distance += 1;
                 //this.score.text = this.distance;
             }
         }
 
-        if(Math.floor(this.mid.scaleX) == 4) {
+        if(Math.floor(this.mid.scaleX) == 5) {
             startCheckMid = true;
         }
 
@@ -210,6 +213,7 @@ class Play extends Phaser.Scene{
                 //this.shipred.setVisible(true);
                 console.log("hit! #mid");
                 console.log(this.hp);
+                this.randomnum();
                 //this.distance += 1;
                 //this.score.text = this.distance;
 
@@ -217,6 +221,7 @@ class Play extends Phaser.Scene{
                 startCheck = false;
                 this.mid.reset();
                 console.log("miss! #mid");
+                this.randomnum();
                 //this.distance += 1;
                 //this.score.text = this.distance;
             }
@@ -237,6 +242,7 @@ class Play extends Phaser.Scene{
                 //this.shipred.setVisible(true);
                 console.log("hit! #big");
                 console.log(this.hp);
+                this.randomnum();
                 //this.distance += 1;
                 //this.score.text = this.distance;
 
@@ -244,15 +250,26 @@ class Play extends Phaser.Scene{
                 startCheckbig = false;
                 this.big.reset();
                 console.log("miss! #big");
+                this.randomnum();
                 //this.distance += 1;
                 //this.score.text = this.distance;
             }
         }
 
         this.background.update(); 
-        this.obstacle.update();
-        this.mid.update();
-        this.big.update();
+        
+        if(appear==0){
+            this.obstacle.update();
+            this.obstacle.alpha = 1;
+
+        
+        }else if(appear == 1)
+            {this.mid.update();
+            this.mid.alpha = 1;
+        
+        }else{this.big.update();
+            this.big.alpha = 1;
+        }
 
         this.distanceTimer = setInterval(this.distanceCheck(),1000);
         
@@ -313,6 +330,12 @@ class Play extends Phaser.Scene{
             this.ship.setVisible(true);                      // make ship visible again
             this.spaceship_red.setVisible(false);                       // remove explosion sprite
         });
+    }
+    randomnum(){
+        appear = Math.floor(Math.random() * 2);
+        xCo = Math.floor(Math.random() * game.config.width);
+        xCo1 = Math.floor(Math.random() * game.config.width);
+        xCo2 = Math.floor(Math.random() * game.config.width);
     }
 
 }
