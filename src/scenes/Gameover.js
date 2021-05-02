@@ -13,7 +13,9 @@ class Gameover extends Phaser.Scene {
     }
 
     create() {
-        //this.distance = playerscore;
+        highscore.push(playerscore);
+        this.hs = Math.max(...highscore);
+
         //display the content
         this.background = new Canvas(this, 320, 440, 'earth').setOrigin(0.5, 0.5);
         this.add.particles('lines', [
@@ -29,6 +31,7 @@ class Gameover extends Phaser.Scene {
                 scale: { min: 0.05, max: 0.2 }
             },
         ]);
+
         this.ship = this.add.sprite(320,240,'ship').setScale(1).setInteractive();
         
         this.ui = this.add.image(320,240,'ui').setOrigin(0.5,0.5);
@@ -42,10 +45,10 @@ class Gameover extends Phaser.Scene {
         //this.distanceText = this.add.text(50,250,'You have traveled ' + this.playerscore +' Miles', scoreConfig);
         this.distanceText = this.add.text(130,200,'You have traveled ' + playerscore +' Miles!', scoreConfig);
         scoreConfig.color='#D4AF37';
-        this.highestscore = this.add.text(190,240,'HIGHEST SCORE!!!',scoreConfig);
+        this.highestscore = this.add.text(190,240,'Highest Score: ' + this.hs,scoreConfig);
         //this.highestscore.setVisible(false);
+
         //go back to menu
-        
         this.menu.on("pointerdown", () => {
             scoreConfig.fontSize='21px';
             scoreConfig.color='#6b97bb';

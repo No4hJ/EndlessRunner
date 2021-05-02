@@ -7,14 +7,32 @@ class Menu extends Phaser.Scene{
     preload() {
         this.load.image('title', './assets/title3.png');
         this.load.image('lines','./assets/lines.png');
-        this.load.audio('button', './assets/button.wav')
-        //this.load.spritesheet('obstacles','./assets/obstacles.png','./assets/obstacles.json')
+        this.load.audio('button', './assets/button.wav');
+        this.load.audio('menubgm','./assets/void_intro.wav');
         this.load.image('play','./assets/Play.png');
         this.load.image('credits','./assets/Credits.png');
         this.load.image('tutorial','./assets/Tutorial.png');
     }
     
     create() {
+        menumusic = this.sound.add('menubgm', {
+            volume: 0.1,
+            loop: true,
+        });
+
+        //play the bgm
+        if (!this.sound.locked)
+        {
+            // already unlocked so play
+            menumusic.play()
+        }
+        else {
+            // wait for 'unlocked' to fire and then play
+            this.sound.once(Phaser.Sound.Events.UNLOCKED, () => {
+                menumusic.play()
+            })
+        }
+
         //create particles
         this.add.particles('lines', [
             {
