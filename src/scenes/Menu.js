@@ -3,8 +3,8 @@ class Menu extends Phaser.Scene{
         super("menuScene");
     }
 
-    //load images
     preload() {
+        //load images
         this.load.image('title', './assets/title3.png');
         this.load.image('lines','./assets/lines.png');
         this.load.audio('button', './assets/button.wav');
@@ -15,12 +15,13 @@ class Menu extends Phaser.Scene{
     }
     
     create() {
+        //background music for menu
         menumusic = this.sound.add('menubgm', {
-            volume: 0.1,
+            volume: 0.5,
             loop: true,
         });
 
-        //play the bgm
+        //play the background music
         if (!this.sound.locked)
         {
             // already unlocked so play
@@ -33,7 +34,7 @@ class Menu extends Phaser.Scene{
             })
         }
 
-        //create particles
+        //create the moving particles for the background
         this.add.particles('lines', [
             {
                 //frame: "lines",
@@ -47,13 +48,12 @@ class Menu extends Phaser.Scene{
                 scale: { min: 0.05, max: 0.2 }
             },
         ]);
+
         //create title
         this.title = this.add.image(game.config.width / 2, game.config.height / 4, "title");
+        
         // create the buttons +  make the buttons clickable
-        //this.playbutton =  this.add.text(200,200, "Play", scoreConfig);
         this.playbutton =  this.add.image(300,250, "play").setInteractive();
-        //this.creditbutton = this.add.text(200,250, "Credit", scoreConfig);
-        //this.tutorialbutton = this.add.text(200,300, "Tutorial", scoreConfig)
         this.creditbutton = this.add.image(300,300, "credits").setInteractive();
         this.tutorialbutton = this.add.image(300,350, "tutorial").setInteractive();
         
@@ -66,7 +66,6 @@ class Menu extends Phaser.Scene{
         //go to credit when click credit
         this.creditbutton.on('pointerdown', () => {
             this.sound.play('button');
-            console.log("e");
             this.scene.start('creditScene');
         })
         

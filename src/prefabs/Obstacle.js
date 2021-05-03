@@ -15,8 +15,8 @@ class Obstacle extends Phaser.GameObjects.Sprite {
 
         //before it reach the edge
         if(!startCheck) {
-            this.scaleX += .011;
-            this.scaleY += .011;
+            this.scaleX += speed + 0.001;
+            this.scaleY += speed + 0.001;
             this.x += .05;
             this.y += .05;
         }
@@ -49,9 +49,9 @@ class Obstacle extends Phaser.GameObjects.Sprite {
     //reset the obstacle back to initial state after checking collision
     reset() {
         this.alpha = 0; //make it invisble for a sec
-        this.x = xCo;
+        this.x = xCo; //back to random x coordinate
         this.y = yCo; //back to intial position
-        this.angle = turn;
+        this.angle = turn; //appear in random angle when generate again
         this.scaleX = 1; //back to initial size
         this.scaleY = 1; // back to initial size
 
